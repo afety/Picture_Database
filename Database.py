@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 #数据库基类
 Base = declarative_base()
-engine = create_engine('mysql+mysqlconnector://root:tanghan@localhost:3306/Disease_Pics')
+engine = create_engine('mysql+mysqldb://root:tanghan@localhost:3306/Disease_Pictures')
 #定义数据库对象
 class Heading(Base):
     #表明
@@ -24,7 +24,7 @@ class Heading(Base):
 
 class Lung(Base):
     # 表明
-    __tablename__ = 'Heading'
+    __tablename__ = 'Lung'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     local_addr = Column(String(255), nullable=False)
@@ -32,7 +32,7 @@ class Lung(Base):
 
 class Pupil(Base):
     # 表明
-    __tablename__ = 'Heading'
+    __tablename__ = 'Pupil'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     local_addr = Column(String(255), nullable=False)
@@ -40,7 +40,7 @@ class Pupil(Base):
 
 class Abdomen(Base):
     # 表明
-    __tablename__ = 'Heading'
+    __tablename__ = 'Abdomen'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     local_addr = Column(String(255), nullable=False)
@@ -49,5 +49,4 @@ class Abdomen(Base):
 
 
 #初始化数据库连接
-
 DBSession = sessionmaker(bind=engine)

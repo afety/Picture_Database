@@ -5,7 +5,7 @@ import random
 
 import bs4
 from selenium import webdriver
-
+from DBMan import *
 
 #文本分析类，用于大致判断图片类别
 class Text_Parser:
@@ -25,19 +25,39 @@ class MedCrawel:
         self.record = []
 
     def start(self):
-        print 1
+
         self.driver.get(self.__root)
-        print 2
+
         soup = bs4.BeautifulSoup(self.driver.page_source,'html.parser')
-        print 3
+
         target_div = soup.find(attrs={'id': 'subdiralphalist'})
-        print 4
+
         links = target_div.find_all('a');
-        print 5
+
         for link in links:
             # self.record.append(root+link['href'])
             print link['href']
-            choose = random.randint(4)
-
+            choose = random.randint(0, 4)
+            num = random.randint(0, 10)
+            heading_localaddr = 'Pictures/Heading/'
+            pupil_localaddr = 'Pictures/Pupil/'
+            abdomen_localaddr = 'Pictures/Abdomen/'
+            lung_localaddr = 'Pictures/Lung/'
+            if(choose == 0):
+                for i in xrange(num):
+                    name = str(random.randint(0, 100000))+'.jpg'
+                    insertHeading(heading_localaddr+name, root+link['href'])
+            elif(choose == 1):
+                for i in xrange(num):
+                    name = str(random.randint(0, 100000)) + '.jpg'
+                    insertLung(lung_localaddr+name, root + link['href'])
+            elif (choose == 2):
+                for i in xrange(num):
+                    name = str(random.randint(0, 100000)) + '.jpg'
+                    insertPupil(pupil_localaddr+name, root + link['href'])
+            elif (choose == 3):
+                for i in xrange(num):
+                    name = str(random.randint(0, 100000)) + '.jpg'
+                    insertAbdomen(abdomen_localaddr+name, root + link['href'])
 test = MedCrawel()
 test.start()

@@ -1,6 +1,7 @@
 #coding:utf8
 #file is used to grap picture and their figure or paper from some specific websits
 #author = tanghan
+import random
 
 import bs4
 from selenium import webdriver
@@ -36,5 +37,7 @@ class MedCrawel:
         for link in links:
             # self.record.append(root+link['href'])
             print link['href']
+            choose = random.randint(4)
+
 test = MedCrawel()
 test.start()

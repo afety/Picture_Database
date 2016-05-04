@@ -12,12 +12,14 @@ def start(filename):
                 break
             val = ''
             for pos in xrange(len(temp)):
-                if temp[pos] == ' ' or pos == len(temp)-1:
-                    if val != '':
-                        vocau.append(val+temp[pos])
+                if temp[pos] == ' ' or temp == '\n':
+                    if val == '':
+                        pass
+                    else:
+                        vocau.append(val)
                         val = ''
                 else:
                     val += temp[pos]
-    print vocau
+    return vocau
 
 start('test')

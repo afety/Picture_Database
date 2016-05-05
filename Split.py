@@ -60,24 +60,32 @@ def WordExtra(filename):
 
 def filter(vocau, stoplist):
     for x in xrange(len(vocau)):
+        print 'create thread'
         t = threading.Thread(target=diff, args=(vocau[x], stoplist[x], x))
         t.start()
-    while not len(FEATHER_WORDS)==26: pass
-    print 48, FEATHER_WORDS
+    print 'judge thread'
+    t = threading.Thread(target=judge)
+    t.start()
 
+def judge():
+    while not len(FEATHER_WORDS) == 26:
+        pass
+    print FEATHER_WORDS
 
 def diff(words, stopwords, pos):
+    print 'thread start'
+    result = []
     if words == [] or stopwords == []:
         pass
     else:
-        result = []
         for x in xrange(len(words)):
             for y in xrange(len(stopwords)):
-                if not words[x] == stopwords[y] and not result.count(words[x]):
-                    print 'append:',words[x]
+                print 'start com'
+                if not words[x] == stopwords[y]:
+                    print 'real append:', words[x]
                     result.append(words[x])
 
-    FEATHER_WORDS.insert(pos, result)
+        FEATHER_WORDS.insert(pos, result)
 
 
 Words = WordExtra_reg('test.txt')

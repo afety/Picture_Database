@@ -1,21 +1,26 @@
 #coding:utf8
 #file is used to test the speed of split a paper
 import codecs
+import nltk
 import threading
+#单词拼写检查
+import enchant
 import re
-from porterStemming import PorterStemmer
+
 
 anthor = 'tanghan'
 
 FEATHER_WORDS = []
-Stemming = PorterStemmer()
+Stemming = nltk.PorterStemmer()
+spellcheck = enchant.Dict("en_US")
+JUDGE = []
 
 def getPos(char):
     if ord(char) < 97 or ord(char) > 122:
         return -1
     return ord(char) - 97
 
-def WordExtra_reg(filename):
+def WordExtra(filename):
     vocau = []
     for i in xrange(26):
         vocau.append([])
@@ -23,39 +28,12 @@ def WordExtra_reg(filename):
         text = ''
         for line in filein.readlines():
             text += line[:len(line)-1]+" "
-        pattern = re.compile("\\w+")
-        res = pattern.findall(text)
+        res = nltk.word_tokenize(text)
         for x in xrange(len(res)):
-            if len(res[x]) >= 4:
-                val = Stemming.stem(res[x], 0, len(res[x]) - 1)
-                vocau[getPos(val[0])].append(val)
-    return vocau
-
-def WordExtra(filename):
-    vocau = []
-    for i in xrange(26):
-        vocau.append([])
-    with codecs.open(filename, 'r', 'utf-8') as paper_in:
-        temp = ''
-        while True:
-            temp = paper_in.readline()
-            if not temp:
-                break
-            val = ''
-            for pos in xrange(len(temp)):
-                if temp[pos] == ' ' or temp == '\n':
-                    if val == '':
-                        pass
-                    else:
-                        p = getPos(val[0])
-                        val = Stemming.stem(val, 0, len(val)-1)
-                        vocau[p].append(val)
-                        val = ''
-                else:
-                    if val == '\'' or val.isdigit() or val == '\\':
-                        val = ''
-                    val += temp[pos].lower()
-    print 40,vocau
+            if len(res[x]) >= 4 and spellcheck.check(res[x]):
+                res[x] = res[x].lower()
+                vocau[getPos(res[x][0])].append(res[x])
+    print vocau
     return vocau
 
 def filter(vocau, stoplist):
@@ -68,7 +46,7 @@ def filter(vocau, stoplist):
     t.start()
 
 def judge():
-    while not len(FEATHER_WORDS) == 26:
+    while not len(JUDGE) == 26:
         pass
     print FEATHER_WORDS
 
@@ -79,15 +57,16 @@ def diff(words, stopwords, pos):
         pass
     else:
         for x in xrange(len(words)):
+            count = 0
             for y in xrange(len(stopwords)):
-                print 'start com'
-                if not words[x] == stopwords[y]:
-                    print 'real append:', words[x]
-                    result.append(words[x])
+                if words[x] == stopwords[y]:
+                    count += 1
+            if not count:
+                result.append(words[x])
 
-        FEATHER_WORDS.insert(pos, result)
+    FEATHER_WORDS.insert(pos, result)
+    JUDGE.append(1)
 
-
-Words = WordExtra_reg('test.txt')
-StopList = WordExtra_reg('StopList.txt')
+Words = WordExtra('test.txt')
+StopList = WordExtra('StopList.txt')
 filter(Words, StopList)

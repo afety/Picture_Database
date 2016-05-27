@@ -3,21 +3,23 @@
 #file is used to established a website to get imgs
 import os
 
-from tornado import web, ioloop
+from tornado import web, ioloop, escape
 
 class UploadFileHandler(web.RequestHandler):
     def get(self):
-        self.write('''
-            <html>
-              <head><title>Upload File</title></head>
-              <body>
-                <form action='file' enctype="multipart/form-data" method='post'>
-                <input type='file' name='file'/><br/>
-                <input type='submit' value='submit'/>
-                </form>
-              </body>
-            </html>
-            ''')
+        items = ['bg.jpg']
+        self.render('FileUpload.html', items=items)
+        # self.write('''
+        #     <html>
+        #       <head><title>Upload File</title></head>
+        #       <body>
+        #         <form action='file' enctype="multipart/form-data" method='post'>
+        #         <input type='file' name='file'/><br/>
+        #         <input type='submit' value='submit'/>
+        #         </form>
+        #       </body>
+        #     </html>
+        #     ''')
 
     def post(self):
         upload_path=os.path.dirname(__file__)+'/' + 'files'  #文件的暂存路径
@@ -34,11 +36,3 @@ class UploadFileHandler(web.RequestHandler):
             with open(filepath,'wb') as up:      #有些文件需要已二进制的形式存储，实际中可以更改
                 up.write(meta['body'])
             self.write('finished!')
-
-app = web.Application([
-    (r'/file', UploadFileHandler),
-])
-
-if __name__ == '__main__':
-    app.listen(12345)
-    ioloop.IOLoop.instance().start()

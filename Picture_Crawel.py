@@ -1,16 +1,15 @@
-#coding:utf8
+#-*- coding: utf-8 -*-
 #file is used to grap picture and their figure or paper from some specific websits
 #author = tanghan
 import random
+import urllib
 
-import bs4
+from bs4 import BeautifulSoup
 from selenium import webdriver
-from DBMan import *
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
-#文本分析类，用于大致判断图片类别
-class Text_Parser:
-    def __init__(self,webtext):
-        self.__text = webtext
 
 #图片抓取类,负责从特定的图片数据库中抓取图片及Paper
 class Crawel:
@@ -19,45 +18,42 @@ class Crawel:
 
 root = 'http://emedicine.medscape.com'
 class MedCrawel:
-    def __init__(self):
-        self.__root = 'http://reference.medscape.com/guide/anatomy'
-        self.driver = webdriver.PhantomJS()
-        self.record = []
+    def __init__(self, root, pre):
+        if root[:4] != 'http':
+            root += 'http://'
+        self.__root = root
+        self.__pre = pre
+        self.driver = webdriver.PhantomJS('D:\phantomjs-1.9.7-windows\phantomjs.exe')
+        self.artical_dic = {}
+        self.__imgdir = './image/'
+
+    def getImageUrl(self):
+        self.driver.get(self.__root)
+        soup = BeautifulSoup(self.driver.page_source, "html.parser")
+        target_div = soup.find(attrs={'id': 'subdiralphalist'})
+        lis = target_div.find_all('li')
+        for li in lis:
+            artical_name = li.getText()
+            __url = li.a['href']
+            artical_url = self.__pre + __url
+            self.artical_dic[artical_name] = artical_url
+
+    def getImage(self):
+        for key in self.artical_dic.keys():
+            self.driver.get(self.artical_dic.get(key))
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            target_div = soup.find_all(attrs={'class':'inlineImage'})
+            for div in target_div:
+                if div.img:
+                    img_url = div.img['src']
+                    start = img_url.rfind('/')
+                    imgname = img_url[start+1:len(img_url)]
+                    imgpath = self.__imgdir+imgname
+                    rawdata = urllib.urlretrieve(img_url, imgpath)
 
     def start(self):
+        self.getImageUrl()
+        self.getImage()
 
-        self.driver.get(self.__root)
-
-        soup = bs4.BeautifulSoup(self.driver.page_source,'html.parser')
-
-        target_div = soup.find(attrs={'id': 'subdiralphalist'})
-
-        links = target_div.find_all('a');
-
-        for link in links:
-            # self.record.append(root+link['href'])
-            print link['href']
-            choose = random.randint(0, 4)
-            num = random.randint(0, 10)
-            heading_localaddr = 'Pictures/Heading/'
-            pupil_localaddr = 'Pictures/Pupil/'
-            abdomen_localaddr = 'Pictures/Abdomen/'
-            lung_localaddr = 'Pictures/Lung/'
-            if(choose == 0):
-                for i in xrange(num):
-                    name = str(random.randint(0, 100000))+'.jpg'
-                    insertHeading(heading_localaddr+name, root+link['href'])
-            elif(choose == 1):
-                for i in xrange(num):
-                    name = str(random.randint(0, 100000)) + '.jpg'
-                    insertLung(lung_localaddr+name, root + link['href'])
-            elif (choose == 2):
-                for i in xrange(num):
-                    name = str(random.randint(0, 100000)) + '.jpg'
-                    insertPupil(pupil_localaddr+name, root + link['href'])
-            elif (choose == 3):
-                for i in xrange(num):
-                    name = str(random.randint(0, 100000)) + '.jpg'
-                    insertAbdomen(abdomen_localaddr+name, root + link['href'])
-test = MedCrawel()
-test.start()
+med = MedCrawel('http://reference.medscape.com/guide/anatomy', 'http://reference.medscape.com')
+med.start()

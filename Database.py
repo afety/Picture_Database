@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 #数据库基类
 Base = declarative_base()
-engine = create_engine('mysql+mysqldb://root:tanghan@localhost:3306/Disease_Pictures')
+engine = create_engine('mysql+mysqldb://root:tanghan@localhost:3306/medicalpic')
 #定义数据库对象
 class Heading(Base):
     #表明

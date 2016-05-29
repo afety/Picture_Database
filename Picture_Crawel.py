@@ -57,7 +57,7 @@ class MedCrawel:
         self.getImageUrl()
         self.getImage()
 
-class
+
 
 med = MedCrawel('http://reference.medscape.com/guide/anatomy', 'http://reference.medscape.com')
 med.start()

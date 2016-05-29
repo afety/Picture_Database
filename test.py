@@ -1,7 +1,4 @@
+from PIL import Image
+from mlabwrap import mlab
+
 __author__ = 'tanghan'
-
-import imghdr
-
-
-imgType = imghdr.what("./Websits/static/bg.jpg")
-print imgType

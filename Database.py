@@ -13,26 +13,36 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 engine = create_engine('mysql+mysqldb://root:tanghan@localhost:3306/medicalpic')
 #定义数据库对象
-class Heading(Base):
+class Brain(Base):
     #表明
-    __tablename__ = 'Heading'
+    __tablename__ = 'Brain'
 
 
     id = Column(Integer,autoincrement=True,primary_key=True)
-    local_addr = Column(String(255),nullable=False)
-    net_addr = Column(String(255),nullable=False)
+    local_addr = Column(String(128),nullable=False)
+    net_addr = Column(String(128),nullable=False)
 
-class Lung(Base):
+class Lung_CR(Base):
     # 表明
-    __tablename__ = 'Lung'
+    __tablename__ = 'Lung_CR'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     local_addr = Column(String(255), nullable=False)
     net_addr = Column(String(255), nullable=False)
 
-class Pupil(Base):
+
+class Lung_CT(Base):
     # 表明
-    __tablename__ = 'Pupil'
+    __tablename__ = 'Lung_CT'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    local_addr = Column(String(255), nullable=False)
+    net_addr = Column(String(255), nullable=False)
+
+
+class Iris(Base):
+    # 表明
+    __tablename__ = 'Iris'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     local_addr = Column(String(255), nullable=False)

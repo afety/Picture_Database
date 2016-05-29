@@ -42,7 +42,7 @@ class MedCrawel:
         for key in self.artical_dic.keys():
             self.driver.get(self.artical_dic.get(key))
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-            target_div = soup.find_all(attrs={'class':'inlineImage'})
+            target_div = soup.find_all(attrs={'class': 'inlineImage'})
             for div in target_div:
                 if div.img:
                     img_url = div.img['src']
@@ -51,9 +51,13 @@ class MedCrawel:
                     imgpath = self.__imgdir+imgname
                     rawdata = urllib.urlretrieve(img_url, imgpath)
 
+    # def imageclassification(self,imgpath):
+
     def start(self):
         self.getImageUrl()
         self.getImage()
+
+class
 
 med = MedCrawel('http://reference.medscape.com/guide/anatomy', 'http://reference.medscape.com')
 med.start()

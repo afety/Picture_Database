@@ -2,14 +2,14 @@
 #file is used to grap picture and their figure or paper from some specific websits
 #author = tanghan
 import os
-import random
 import threading
 import urllib
+import sys
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import sys
-from DBMan import insertPicture
+
+from pythonscript import DBMan
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -30,6 +30,7 @@ class MedCrawel:
         self.driver = webdriver.PhantomJS('D:\phantomjs-1.9.7-windows\phantomjs.exe')
         self.artical_dic = {}
         self.__imgdir = './image/'
+        self.dbman = DBMan()
 
     def getImageUrl(self):
         self.driver.get(self.__root)
@@ -75,11 +76,12 @@ class MedCrawel:
             print 'local_addr:', local_addr
             print 'net_addr:', net_addr
             print 'artical_url:', artical_url
-            self.insertpicture(local_addr, img_url, artical_url)
-
-    def insertpicture(self, local_addr, net_addr, artical_url):
-        print 'insert picture'
-        insertPicture(local_addr, net_addr, artical_url)
+            if not self.dbman.articalexist(artical_url):
+                self.dbman.insertPicture(local_addr, img_url, artical_url)
+            else:
+                pass
+        else:
+            pass
 
     # def imageclassification(self,imgpath):
 

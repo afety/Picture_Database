@@ -11,7 +11,7 @@ category={
     "3": "lungCT",
     "4": "brain",
     "5": "abdomen",
-    "6": "retinal"
+    "6": "retinal.txt"
 }
 
 class classification:

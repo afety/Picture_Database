@@ -43,9 +43,11 @@ class xctmr_Website(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     url = Column(Integer, unique=True)
+    typeid = Column(Integer, ForeignKey('type.id'))
 
-    def __init__(self, url):
+    def __init__(self, url, typeid):
         self.url = url
+        self.typeid = typeid
 
 #xctmr图片存储表
 class xctmr_picture(Base):
@@ -58,6 +60,16 @@ class xctmr_picture(Base):
     def __init__(self, localaddr, urlid):
         self.localaddr = localaddr
         self.urlid = urlid
+
+'''类型表'''
+class typetable(Base):
+    __tablename__ = "type"
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    typename = Column(String(255), nullable=False, unique=True)
+
+    def __init__(self, typename):
+        self.typename = typename
 
 DBSession = sessionmaker()
 Base.metadata.create_all(engine)

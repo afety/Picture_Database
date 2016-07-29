@@ -1,11 +1,14 @@
 #coding:utf8
 #time : 2016.07.27
 #file is used to get images from xctmr
+import os
 import urllib2
 
 import chardet
 from bs4 import BeautifulSoup
 from DBMan import DBMan
+from pythonscript.randonname import randomname
+
 
 class xctmrcrawel():
     def __init__(self):
@@ -75,7 +78,7 @@ class xctmrcrawel():
                     source = res.read()
                     sub_soup = BeautifulSoup(source, 'html.parser')
                     target_lists = sub_soup.find(attrs={'class': 'news_list'})
-                    articalurls = target_list.find_all('a')
+                    articalurls = target_lists.find_all('a')
                     for link in articalurls:
                         if link.has_attr('href') and link.has_attr('title'):
                             if not self.dbman.xctmrwebsite_urlexist(link['href']):
@@ -83,11 +86,20 @@ class xctmrcrawel():
                                     articallist.append(link['href'])
                                 else:
                                     return
-            for articalurl in articalurls:
-                self.getarticalimages(articalurl)
-
+            for articalurl in articallist:
+                dirname = randomname(6)
+                dirparth = ''
+                while os.path.exists(self.imagesdir + '/' + dirname):
+                    dirname = randomname(6)
+                dirpath = self.imagesdir + '/' + dirname
+                try:
+                    os.mkdir(dirpath)
+                    self.getarticalimages(articalurl, dirpath)
+                except Exception, e:
+                    print 'Except occurred in mkdir image dir:', e
+                    return
     # 文章图片抓取， 并判断分页情况
-    def getarticalimages(self, articalurl):
+    def getarticalimages(self, articalurl, dirpath):
         res = urllib2.urlopen(articalurl)
         pagesource = res.read()
         soup = BeautifulSoup(page_source, 'html.parser')
@@ -122,9 +134,22 @@ class xctmrcrawel():
                 for img in imgs:
                     imageurls.append(self.homeurl + img['src'])
         # 图片存储
+        # 获取网站ID
+        urlid = self.dbman.xctmrwebsite_getidbyurl(articalurl)
+        IMGNAMELENGTH = 8
         for imageurl in imageurls:
 
+            imgname = randomname(IMGNAMELENGTH)
+            while os.path.exists(dirpath + '/' + imgname + '.bmp'):
+                imgname = randomname(IMGNAMELENGTH)
+            imgpath = dirpath + '/' + imgname + '.bmp'
+            resp = urllib2.urlopen(imageurl)
+            with open(imgpath, 'wb') as imgfile:
+                imgfile.write(resp.read())
+            # 图片插入
+            self.dbman.xctmrpicture_insert(localaddr=imgpath, urlid=urlid)
 
+            # hashstr计算
 
 if __name__ == "__main__":
     res = urllib2.urlopen('http://www.xctmr.com/thorax/lung/2010-05-20/4ab52af276e7722bec138939c6f789e3.html')

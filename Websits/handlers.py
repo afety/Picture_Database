@@ -9,25 +9,14 @@ from tornado import web, ioloop, escape
 
 class UploadFileHandler(web.RequestHandler):
     def get(self):
-        # items = ['image/bg.jpg', 'image/bg1.jpg', 'image/bg2.jpg']
-        # self.render('FileUpload.html', items=items)
-        self.write('''
-            <html>
-              <head><title>Upload File</title></head>
-              <body>
-                <form action='file' enctype="multipart/form-data" method='post'>
-                <input type='file' name='file'/><br/>
-                <input type='submit' value='submit'/>
-                </form>
-              </body>
-            </html>
-            ''')
+        self.render('TinEyeReverseImageSearch.html')
+
 
     def post(self):
         upload_path = os.path.dirname(__file__)+'\\' + 'static\\userimage'  #文件的暂存路径
         if not os.path.exists(upload_path):
             os.mkdir(upload_path)
-        file_metas = self.request.files['file']    #提取表单中‘name’为‘file’的文件元数据
+        file_metas = self.request.files['image']    #提取表单中‘name’为‘file’的文件元数据
         print file_metas
         for meta in file_metas:
             filename=meta['filename']

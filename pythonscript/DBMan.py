@@ -1,4 +1,5 @@
 #coding:utf8
+from sqlalchemy import text
 from sqlalchemy.orm import Mapper
 
 from Database import *
@@ -23,10 +24,12 @@ class DBMan:
     #url存在
     def xctmrwebsite_urlexist(self, url):
         try:
+            print url
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).fetchone()
+            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).one()
+            print result
             session.close()
-            return not result == None
+            return not result[0] == None
         except Exception, e:
             print 'Error in judge whether url exist:', e
             return False
@@ -34,8 +37,8 @@ class DBMan:
     def xctmrwebsite_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.id == id).fetchone()
-            return not result == None
+            result = session.query(xctmr_Website.id).filter(xctmr_Website.id == id).one()
+            return not result[0] == None
         except Exception,e:
             print 'Error in judge id exist in xctmr_website:', e
             return False
@@ -43,8 +46,8 @@ class DBMan:
     def xctmrwebsite_typeidexist(self, typeid):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.typeid == typeid).fetchone()
-            return not result == None
+            result = session.query(xctmr_Website.id).filter(xctmr_Website.typeid == typeid).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in judge typeid exist in xctmr_website:', e
             return False
@@ -54,9 +57,9 @@ class DBMan:
     def xctmrwebsite_getidbyurl(self, url):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).fetchone()
+            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
             print 'Error in get id by url on xctmr_website:', e
             return None
@@ -64,9 +67,9 @@ class DBMan:
     def xctmrwebsite_getwebsiteinfobyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id, xctmr_Website.url, xctmr_Website.typeid).filter(xctmr_Website.url == url).fetchone()
+            result = session.query(xctmr_Website.id, xctmr_Website.url, xctmr_Website.typeid).filter(xctmr_Website.url == id).one()
             session.close()
-            return result
+            return [result[0], result[1]]
         except Exception, e:
             print 'Error in get id by url on xctmr_website:', e
             return []
@@ -74,19 +77,19 @@ class DBMan:
     def xctmrwebsite_geturlbyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.url).filter(xctmr_Website.id == id).fetchone()
+            result = session.query(xctmr_Website.url).filter(xctmr_Website.id == id).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
             print 'Error in get url by id on xctmr_website:', e
             return None
 
     '''xctmr_picture表操作'''
     #插入
-    def xctmrpicture_insert(self, localaddr, urlid):
+    def xctmrpicture_insert(self, localaddr, urlid, sid):
         try:
             session = DBSession()
-            xctmrpicture = xctmr_picture(localaddr=localaddr, urlid=urlid)
+            xctmrpicture = xctmr_picture(localaddr=localaddr, urlid=urlid, sourcetableid=sid)
             session.add(xctmrpicture)
             session.commit()
             session.close()
@@ -100,9 +103,9 @@ class DBMan:
     def xctmrpicture_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.id == id).fetchone()
+            result = session.query(xctmr_picture.id).filter(xctmr_picture.id == id).one()
             session.close()
-            return not result == None
+            return not result[0] == None
         except Exception, e:
             print 'Error on xctmr_picture id exist:', e
             return False
@@ -111,9 +114,9 @@ class DBMan:
     def xctmrpicture_localaddrexist(self, localaddr):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).fetchone()
+            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).one()
             session.close()
-            return not result == None
+            return not result[0] == None
         except Exception, e:
             print 'Error on xctmr_picture localaddr exist:', e
             return False
@@ -122,22 +125,43 @@ class DBMan:
     def xctmrpicture_getidbylocaladdr(self, localaddr):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).fetchone()
+            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
-            print 'Error on xctmr_picture localaddr exist:', e
+            print 'Error on xctmrpicture_getidbylocaladdr:', e
             return None
 
     def xctmrpicture_getlocaladdrbyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.localaddr).filter(xctmr_picture.id == id).fetchone()
+            result = session.query(xctmr_picture.localaddr).filter(xctmr_picture.id == id).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
-            print 'Error on xctmr_picture localaddr exist:', e
+            print 'Error on xctmrpicture_getlocaladdrbyid:', e
             return None
+
+    def xctmrpicture_getwtablenamebyid(self, id):
+        try:
+            session = DBSession()
+            result = session.query(xctmr_picture.sourcetableid).filter(xctmr_picture.id == id).one()
+            session.close()
+            return result[0]
+        except Exception, e:
+            print 'Error on xctmrpicture_getwtablenamebyid:', e
+            return None
+
+    def xctmrpicture_getwtablenamebylocaladdr(self, localaddr):
+        try:
+            session = DBSession()
+            result = session.query(xctmr_picture.sourcetableid).filter(xctmr_picture.localaddr == localaddr).one()
+            session.close()
+            return result[0]
+        except Exception, e:
+            print 'Error on xctmrpicture_getwtablenamebylocaladdr:', e
+            return None
+
 
     '''sourcetables表操作'''
     def sourcetables_insert(self, tablename):
@@ -156,9 +180,9 @@ class DBMan:
     def sourcetables_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(sourcetables.id).filter(sourcetables.id == id).fetchone()
+            result = session.query(sourcetables.id).filter(sourcetables.id == id).one()
             session.close()
-            return not result == None
+            return not result[0] == None
         except Exception, e:
             print 'Error in sourcetables_idexist:', e
             return False
@@ -167,9 +191,9 @@ class DBMan:
     def sourcetables_tablenameexist(self, tablename):
         try:
             session = DBSession()
-            result = session.query(sourcetables.id).filter(sourcetables.tablename == tablename).fetchone()
+            result = session.query(sourcetables.id).filter(sourcetables.tablename == tablename).one()
             session.close()
-            return not result == None
+            return not result[0] == None
         except Exception, e:
             print 'Error in sourcetables_tablenameexist:', e
             return False
@@ -178,9 +202,9 @@ class DBMan:
     def sourcetabls_getidbytablename(self, tablename):
         try:
             session = DBSession()
-            result = session.query(sourcetables.id).filter(sourcetables.tablename == tablename).fetchone()
+            result = session.query(sourcetables.id).filter(sourcetables.tablename == tablename).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
             print 'Error in getidbytablename:', e
             return None
@@ -189,9 +213,9 @@ class DBMan:
     def sourcetable_gettablenamebyid(self, id):
         try:
             session = DBSession()
-            result = session.query(sourcetables.tablename).filter(sourcetables.id == id).fetchone()
+            result = session.query(sourcetables.tablename).filter(sourcetables.id == id).one()
             session.close()
-            return result
+            return result[0]
         except Exception, e:
             print 'Error in gettablenamebyid:', e
             return None
@@ -217,8 +241,8 @@ class DBMan:
     def picture_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(picture.id).filter(picture.id == id).fetchone()
-            return not result == None
+            result = session.query(picture.id).filter(picture.id == id).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in picture_idexist:', e
             return False
@@ -227,8 +251,8 @@ class DBMan:
     def picture_pidexist(self, pid):
         try:
             session = DBSession()
-            result = session.query(picture.id).filter(picture.pid == pid).fetchone()
-            return not result == None
+            result = session.query(picture.id).filter(picture.pid == pid).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in picture_pidexist:', e
             return False
@@ -237,8 +261,8 @@ class DBMan:
     def picture_sourcetableidexist(self, sourcetableid):
         try:
             session = DBSession()
-            result = session.query(picture.id).filter(picture.sourcetableid == sourcetableid).fetchone()
-            return not result == None
+            result = session.query(picture.id).filter(picture.sourcetableid == sourcetableid).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in picture_sourcetableidexist:', e
             return False
@@ -247,8 +271,8 @@ class DBMan:
     def picture_hashstrexist(self, hashstr):
         try:
             session = DBSession()
-            result = session.query(picture.id).filter(picture.hashstr == hashstr).fetchone()
-            return not result == None
+            result = session.query(picture.id).filter(picture.hashstr == hashstr).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in picture_hashstrexist:', e
             return False
@@ -258,9 +282,12 @@ class DBMan:
     def picture_getinfobyhashstr(self, hashstr):
         try:
             session = DBSession()
-            result = session.query(picture.id, picture.pid, picture.sourcetableid, picture.hashstr).filter(picture.hashstr == hashstr).fetchall()
+            result = session.query(picture.id, picture.pid, picture.sourcetableid, picture.hashstr).filter(picture.hashstr == hashstr).all()
             session.close()
-            return result
+            temp = []
+            for row in result:
+                temp.append([row[0], row[1], row[2], row[3]])
+            return temp
         except Exception, e:
             print 'Error in picture_getinfobyhashstr:', e
             return []
@@ -269,9 +296,13 @@ class DBMan:
     def picture_getinfobyid(self, id):
         try:
             session = DBSession()
-            result = session.query(picture.id, picture.pid, picture.sourcetableid, picture.hashstr).filter(picture.id == id).fetchall()
+            result = session.query(picture.id, picture.pid, picture.sourcetableid, picture.hashstr).filter(picture.id == id).all()
             session.close()
-            return result
+            temp = []
+            for row in result:
+                temp.append([row[0], row[1], row[2], row[3]])
+            return temp
+
         except Exception, e:
             print 'Error in picture_getinfobyhashstr:', e
             return []
@@ -292,9 +323,10 @@ class DBMan:
     # typename存在
     def type_typenameexist(self, typename):
         try:
+            print 'typename:', typename
             session = DBSession()
-            result = session.query(typetable.id).filter(typetable.typename == typename).fetchone()
-            return not result == None
+            result = session.query(typetable.id).filter(typetable.typename == typename).one()
+            return not result[0] == None
         except Exception, e:
             print 'Error in type_typenameexist:', e
             return False
@@ -303,8 +335,8 @@ class DBMan:
     def type_getidbytypename(self, typename):
         try:
             session = DBSession()
-            result = session.query(typetable.id).filter(typetable.typename == typename).fetchone()
-            return result
+            result = session.query(typetable.id).filter(typetable.typename == typename).one()
+            return result[0]
         except Exception, e:
             print 'Error in type_getidbytypename:', e
             return None
@@ -313,12 +345,32 @@ class DBMan:
     def type_gettypenamebyid(self, id):
         try:
             session = DBSession()
-            result = session.query(typetable.typename).filter(typetable.id == id).fetchone()
-            return result
+            result = session.query(typetable.typename).filter(typetable.id == id).one()
+            return result[0]
         except Exception, e:
             print 'Error in type_typenameexist:', e
             return None
 
+    # 传递表名和ID值获取图片信息
+    def getinfobytablenameandid(self, tablename, id):
+        try:
+            session = DBSession()
+            getinfotext = text("select * from " + tablename + " where id=:id")
+            result = session.execute(getinfotext, {'id': id})
+            info = []
+            for row in result:
+                for x in row:
+                    info.append(x)
+            session.close()
+            return info
+        except Exception, e:
+            print 'Error in getinfobytablenameandid:', e
+            return []
+
 if __name__ == "__main__":
-    dbman = DBMan()
-    dbman.xctmrwebsite_insert('123')
+    session = DBSession()
+    tablename = "xctmr_website"
+    sqlstr = text("select * from " + tablename + " where id =:id")
+    result = session.execute(sqlstr, params={'id': 1535})
+    for row in result:
+        print [x for x in row]

@@ -56,10 +56,13 @@ class xctmr_picture(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     localaddr = Column(String(255), nullable=False, unique=True)
     urlid = Column(String(255), nullable=True)
+    sourcetableid = Column(String(255), nullable=True)
 
-    def __init__(self, localaddr, urlid):
+
+    def __init__(self, localaddr, urlid, sourcetableid):
         self.localaddr = localaddr
         self.urlid = urlid
+        self.sourcetableid = sourcetableid
 
 '''类型表'''
 class typetable(Base):
@@ -71,5 +74,5 @@ class typetable(Base):
     def __init__(self, typename):
         self.typename = typename
 
-DBSession = sessionmaker()
+DBSession = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)

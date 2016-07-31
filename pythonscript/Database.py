@@ -74,5 +74,31 @@ class typetable(Base):
     def __init__(self, typename):
         self.typename = typename
 
+'''yxtk_website 表'''
+class yxtk_website(Base):
+    __tablename__ = 'yxtk_website'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    url = Column(Integer, unique=True)
+    typeid = Column(Integer, ForeignKey('type.id'))
+
+    def __init__(self, url, typeid):
+        self.url = url
+        self.typeid = typeid
+
+'''yxtk_picture 表'''
+class yxtk_picture(Base):
+    __tablename__ = "yxtk_picture"
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    localaddr = Column(String(255), nullable=False, unique=True)
+    urlid = Column(String(255), nullable=True)
+    sourcetableid = Column(String(255), nullable=True)
+
+    def __init__(self, localaddr, urlid, sourcetableid):
+        self.localaddr = localaddr
+        self.urlid = urlid
+        self.sourcetableid = sourcetableid
+
 DBSession = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)

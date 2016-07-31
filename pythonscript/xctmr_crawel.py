@@ -146,7 +146,7 @@ class xctmrcrawel():
                         imageurls.append(img['src'])
                 except Exception, e:
                     print 'Connect Error in getarticalimage in get imageurls:', e
-                    with open('getimageurlerror.log', 'w') as logfile:
+                    with open('getimageurlerror.log', 'aw') as logfile:
                         for img in error:
                             logfile.write(img['src'] + '\n')
         # 图片存储

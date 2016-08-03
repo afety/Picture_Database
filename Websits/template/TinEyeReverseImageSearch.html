@@ -1,195 +1,70 @@
 <!DOCTYPE html>
-<html class="wf-opensans-n3-active wf-opensans-n4-active wf-opensans-n7-active wf-opensanscondensed-n3-active wf-opensanscondensed-n7-active wf-rokkitt-n4-active wf-rokkitt-n7-active wf-active"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Image Search</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="title" content="TinEye Reverse Search Engine">
-  <link href="{{static_url('TinEyeReverseImageSearch_files/bootstrap.min.css')}}" media="screen, projection" rel="stylesheet" type="text/css">
-
-  <link href="{{static_url('TinEyeReverseImageSearch_files/base.min.css')}}" media="screen, projection" rel="stylesheet" type="text/css">
-
-  <link href="{{static_url('TinEyeReverseImageSearch_files/home.min.css')}}" media="screen, projection" rel="stylesheet" type="text/css">
-
-<!-- Quantcast, part 1 -->
-<script async="" type="text/javascript" src="{{static_url('TinEyeReverseImageSearch_files/gpt.js')}}"></script><script src="./TinEyeReverseImageSearch_files/quant.js" async="" type="text/javascript"></script><script type="text/javascript">
-  var _qevents = _qevents || [];
-
-  (function() {
-    var elem = document.createElement('script');
-    elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
-    elem.async = true;
-    elem.type = "text/javascript";
-    var scpt = document.getElementsByTagName('script')[0];
-    scpt.parentNode.insertBefore(elem, scpt);
-  })();
-</script>
-
-  <!--[if lt IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
-  <script src="{{static_url('TinEyeReverseImageSearch_files/jquery-1.11.0.min.js')}}" type="text/javascript"></script>
-  <script src="{{static_url('TinEyeReverseImageSearch_files/base.min.js')}}" type="text/javascript"></script>
-
-  
-  <script src="{{static_url('TinEyeReverseImageSearch_files/webfont.js')}}"></script>
-  <link rel="stylesheet" href="{{static_url('TinEyeReverseImageSearch_files/css')}}" media="all"><script type="text/javascript">
-  WebFont.load({
-    google:{families:['Open+Sans:300,400,700:latin', 'Open+Sans+Condensed:300,700:latin', 'Rokkitt:400,700:latin']},
-    timeout: 2000
-  });
-  </script>
-
-  <script type="text/javascript">
-    function hide_search_submit() {
-      $("#file_submit").hide();
-    }
-    $(document).bind("reached_search", null, hide_search_submit);
-  </script>
-
-
-  <script src="{{static_url('TinEyeReverseImageSearch_files/home.min.js')}}" type="text/javascript"></script>
-  <!--<script type="text/javascript">-->
-    <!--$(document).ready(function() {-->
-      <!--show_plugins();-->
-      <!--drag_and_drop('http://tineye.com/search');-->
-    <!--});-->
-  <!--</script>-->
+<html class="wf-opensans-n3-active wf-opensans-n4-active wf-opensans-n7-active wf-opensanscondensed-n3-active wf-opensanscondensed-n7-active wf-rokkitt-n4-active wf-rokkitt-n7-active wf-active">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Image Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="title" content="TinEye Reverse Search Engine">
+    <link href="{{static_url('TinEyeReverseImageSearch_files/bootstrap.min.css')}}" media="screen, projection"
+          rel="stylesheet" type="text/css">
+    <link href="{{static_url('TinEyeReverseImageSearch_files/base.min.css')}}" media="screen, projection"
+          rel="stylesheet" type="text/css">
+    <link href="{{static_url('TinEyeReverseImageSearch_files/home.min.css')}}" media="screen, projection"
+          rel="stylesheet" type="text/css">
+    <script src="{{static_url('TinEyeReverseImageSearch_files/jquery-1.11.0.min.js')}}" type="text/javascript"></script>
+    <script src="{{static_url('TinEyeReverseImageSearch_files/base.min.js')}}" type="text/javascript"></script>
+    <script src="{{static_url('TinEyeReverseImageSearch_files/webfont.js')}}"></script>
+    <link rel="stylesheet" href="{{static_url('TinEyeReverseImageSearch_files/css')}}" media="all">
+    <script type="text/javascript">
+        WebFont.load({
+            google: {families: ['Open+Sans:300,400,700:latin', 'Open+Sans+Condensed:300,700:latin', 'Rokkitt:400,700:latin']},
+            timeout: 2000
+        });
+    </script>
+    <script src="{{static_url('TinEyeReverseImageSearch_files/home.min.js')}}" type="text/javascript"></script>
 </head>
-<body>
-
-  <div id="upload_overlay">
-    <div id="upload_overlay_message" style="display: none">
-      <img src="{{static_url('TinEyeReverseImageSearch_files/large_throbber.gif')}}" width="32" height="32" alt="Uploading your image..."><br>
-      Uploading your image...
+<body style="width: 100%; height: 100%;">
+    <div class="search-container">
+        <div class="search container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-md-offset-3">
+                    <h1>Reverse Image Search</h1>
+                    <h3 class="index-size"></h3>
+                    <div class="forms">
+                        <form id="upload_form" method="post" action="file" enctype="multipart/form-data">
+                            <label for="upload_box" id="upload-button"></label>
+                            <input id="upload_box" name="image" onchange="display_throbber(); this.form.submit()"
+                                   title="Upload an image" type="file">
+                            <input style="display: none;" id="file_submit" value="Upload Image" class="submit"
+                                   type="submit">
+                        </form>
+                        <form id="url_form" method="post" action="file" onsubmit="display_throbber();">
+                            <div class="input-container">
+                                <input class="image-url" id="url_box" name="url" maxlength="100000"
+                                       placeholder="Upload or enter Image URL"
+                                       onfocus="this.form.search_button.disabled=false" type="text">
+                            </div>
+                            <input class="submit-button" id="url_submit" name="search_button" value="" type="submit"
+                                   disabled="disabled">
+                        </form>
+                    </div>
+                </div>
+                <div class="robot col-md-3 visible-md-block visible-lg-block">
+                    <img src="{{static_url('TinEyeReverseImageSearch_files/robot-search-header.png')}}" width="129"
+                         height="158" alt="Robot">
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  
-  
-  
-<header>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-
-        <div class="hidden-sm hidden-xs left-nav">
+    <div class="ads-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
+            </div>
         </div>
-
-        <div class="visible-sm-block visible-xs-block mobile-menu">
-          <a class="hamburger" onclick="javascript:$(&#39;#mobile-menu&#39;).toggle()"><img src="{{static_url('TinEyeReverseImageSearch_files/menu-light.png')}}" width="32" height="33" alt=""></a>
-          <div id="mobile-menu">
-            <img src="{{static_url('TinEyeReverseImageSearch_files/mobile-menu.png')}}" width="14" height="10" alt="" class="menu-arrow">
-            <ul>
-            </ul>
-          </div>
-        </div>
-
-        <div id="account-nav" class="visible-md-block visible-lg-block">
-
-          <ul>
-          </ul>
-
-
-        </div>
-
-        <div id="login-menu" class="nav-menu" style="display: none;">
-          <ul>
-            <img src="{{static_url('TinEyeReverseImageSearch_files/mobile-menu.png')}}" width="14" height="10" alt="" class="menu-arrow">
-          </ul>
-        </div>
-      </div>
     </div>
-  </div>
-</header>
-
-
-    
-
-  <div class="search-container">
-    <div class="search container">
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-md-offset-3">
-          <h1>Reverse Image Search</h1>
-          <h3 class="index-size">
-          <div class="forms">
-            <form id="upload_form" method="post" action="file" enctype="multipart/form-data">
-              <label for="upload_box" id="upload-button"><img src="{{static_url('TinEyeReverseImageSearch_files/upload.png')}}"></label>
-              <input id="upload_box" name="image" onchange="display_throbber(); this.form.submit()" title="Upload an image" type="file">
-              <input style="display: none;" id="file_submit" value="Upload Image" class="submit" type="submit">
-            </form>
-            <form id="url_form" method="post" action="file" onsubmit="display_throbber();">
-              <div class="input-container">
-                <input class="image-url" id="url_box" name="url" maxlength="100000" placeholder="Upload or enter Image URL" onfocus="this.form.search_button.disabled=false" type="text">
-              </div>
-              <input class="submit-button" id="url_submit" name="search_button" value="" type="submit" disabled="disabled">
-            </form>
-          </div>
-
-          <script type="text/javascript">
-            $(document).trigger('reached_search', null);
-          </script>
-        </div>
-        <div class="robot col-md-3 visible-md-block visible-lg-block">
-          <img src="{{static_url('TinEyeReverseImageSearch_files/robot-search-header.png')}}" width="129" height="158" alt="Robot">
-        </div>
-      </div>
-
-      <div class="row highlights" style="display: block;">
-        <div class="col-xs-12 col-sm-4">
-          <div>
-          </div>
-        </div>
-        <div class="plugins-container col-xs-12 col-sm-4">
-          <div>
-          </div>
-        </div>
-        <div class="labs-container col-xs-12 col-sm-4">
-          <div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ads-container">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    if (!window.operamini) {
-      $("#url_submit").attr("disabled","disabled");
-    }
-  </script>
-
-  <div id="drag_and_drop" style="display: none;">
-    <form id="upload_form_drag" method="post" action="http://tineye.com/search" enctype="multipart/form-data">
-      <input type="file" id="upload_box_drag" name="image">
-      <input type="submit" id="file_submit">
-    </form>
-    <form id="url_form_drag" method="post" action="http://tineye.com/search">
-      <input type="text" id="url_box_drag" name="url" maxlength="100000">
-      <input type="submit" id="url_submit" name="search_button">
-    </form>
-  </div>
-
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8">
-          <ul>
-          </ul>
-        </div>
-        <div class="col-sm-4">
-          <ul>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
-</body></html>
+</body>
+</html>

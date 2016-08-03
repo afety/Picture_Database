@@ -6,7 +6,6 @@ from Database import *
 from sqlalchemy.sql import select
 
 class DBMan:
-
     '''xctmr_website 表操作'''
     # 插入
     def xctmrwebsite_insert(self, url, typeid):
@@ -373,12 +372,12 @@ class DBMan:
     def yxtkwebsite_insert(self, url, typeid):
         try:
             session = DBSession()
-            website = xctmr_Website(url=url, typeid=typeid)
+            website = yxtk_website(url=url, typeid=typeid)
             session.add(website)
             session.commit()
             session.close()
         except Exception, e:
-            print 'Error in insert xctmr_website:', e
+            print 'Error in insert yxtk_website:', e
             return False
         return True
 
@@ -388,80 +387,80 @@ class DBMan:
         try:
             print url
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).one()
+            result = session.query(yxtk_website.id).filter(yxtk_website.url == url).one()
             print result
             session.close()
             return not result[0] == None
         except Exception, e:
-            print 'Error in judge whether url exist:', e
+            print 'Error in yxtk_website whether url exist:', e
             return False
 
     # id存在
     def yxtkwebsite_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.id == id).one()
+            result = session.query(yxtk_website.id).filter(yxtk_website.id == id).one()
             return not result[0] == None
         except Exception, e:
-            print 'Error in judge id exist in xctmr_website:', e
+            print 'Error in judge id exist in yxtk_website:', e
             return False
 
     # typeid存在
     def yxtkwebsite_typeidexist(self, typeid):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.typeid == typeid).one()
+            result = session.query(yxtk_website.id).filter(yxtk_website.typeid == typeid).one()
             return not result[0] == None
         except Exception, e:
-            print 'Error in judge typeid exist in xctmr_website:', e
+            print 'Error in judge typeid exist in yxtk_website:', e
             return False
 
     # id获取url
     def yxtkwebsite_getidbyurl(self, url):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id).filter(xctmr_Website.url == url).one()
+            result = session.query(yxtk_website.id).filter(yxtk_website.url == url).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error in get id by url on xctmr_website:', e
+            print 'Error in get id by url on yxtk_website:', e
             return None
 
     # id获取信息
     def yxtkwebsite_getwebsiteinfobyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.id, xctmr_Website.url, xctmr_Website.typeid).filter(
+            result = session.query(yxtk_website.id, yxtk_website.url, yxtk_website.typeid).filter(
                 xctmr_Website.url == id).one()
             session.close()
             return [result[0], result[1]]
         except Exception, e:
-            print 'Error in get id by url on xctmr_website:', e
+            print 'Error in get id by url on yxtk_website:', e
             return []
 
     # url获取id
     def yxtkwebsite_geturlbyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_Website.url).filter(xctmr_Website.id == id).one()
+            result = session.query(yxtk_website.url).filter(yxtk_website.id == id).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error in get url by id on xctmr_website:', e
+            print 'Error in get url by id on yxtk_website:', e
             return None
 
-    '''xctmr_picture表操作'''
+    '''yxtk_picture表操作'''
 
     # 插入
     def yxtkpicture_insert(self, localaddr, urlid, sid):
         try:
             session = DBSession()
-            xctmrpicture = xctmr_picture(localaddr=localaddr, urlid=urlid, sourcetableid=sid)
-            session.add(xctmrpicture)
+            picture = yxtk_picture(localaddr=localaddr, urlid=urlid, sourcetableid=sid)
+            session.add(picture)
             session.commit()
             session.close()
         except Exception, e:
-            print 'Error in insert into xctmr_picture:', e
+            print 'Error in insert into yxtk_picture:', e
             return False
         return True
 
@@ -470,63 +469,63 @@ class DBMan:
     def yxtkpicture_idexist(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.id == id).one()
+            result = session.query(yxtk_picture.id).filter(yxtk_picture.id == id).one()
             session.close()
             return not result[0] == None
         except Exception, e:
-            print 'Error on xctmr_picture id exist:', e
+            print 'Error on yxtk_picture id exist:', e
             return False
 
     # localaddr exist
     def yxtkpicture_localaddrexist(self, localaddr):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).one()
+            result = session.query(yxtk_picture.id).filter(yxtk_picture.localaddr == localaddr).one()
             session.close()
             return not result[0] == None
         except Exception, e:
-            print 'Error on xctmr_picture localaddr exist:', e
+            print 'Error on yxtk_picture localaddr exist:', e
             return False
 
     # 查询
     def yxtkpicture_getidbylocaladdr(self, localaddr):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.id).filter(xctmr_picture.localaddr == localaddr).one()
+            result = session.query(yxtk_picture.id).filter(yxtk_picture.localaddr == localaddr).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error on xctmrpicture_getidbylocaladdr:', e
+            print 'Error on yxtkpicture_getidbylocaladdr:', e
             return None
 
     def yxtkpicture_getlocaladdrbyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.localaddr).filter(xctmr_picture.id == id).one()
+            result = session.query(yxtk_picture.localaddr).filter(yxtk_picture.id == id).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error on xctmrpicture_getlocaladdrbyid:', e
+            print 'Error on yxtkrpicture_getlocaladdrbyid:', e
             return None
 
     def yxtkpicture_getwtablenamebyid(self, id):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.sourcetableid).filter(xctmr_picture.id == id).one()
+            result = session.query(yxtk_picture.sourcetableid).filter(yxtk_picture.id == id).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error on xctmrpicture_getwtablenamebyid:', e
+            print 'Error on yxtkpicture_getwtablenamebyid:', e
             return None
 
     def yxtkpicture_getwtablenamebylocaladdr(self, localaddr):
         try:
             session = DBSession()
-            result = session.query(xctmr_picture.sourcetableid).filter(xctmr_picture.localaddr == localaddr).one()
+            result = session.query(yxtk_picture.sourcetableid).filter(yxtk_picture.localaddr == localaddr).one()
             session.close()
             return result[0]
         except Exception, e:
-            print 'Error on xctmrpicture_getwtablenamebylocaladdr:', e
+            print 'Error on yxtkpicture_getwtablenamebylocaladdr:', e
             return None
 
 if __name__ == "__main__":

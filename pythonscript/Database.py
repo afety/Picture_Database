@@ -42,7 +42,7 @@ class xctmr_Website(Base):
     __tablename__ = "xctmr_website"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    url = Column(Integer, unique=True)
+    url = Column(String(255), unique=True)
     typeid = Column(Integer, ForeignKey('type.id'))
 
     def __init__(self, url, typeid):
@@ -79,7 +79,7 @@ class yxtk_website(Base):
     __tablename__ = 'yxtk_website'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    url = Column(Integer, unique=True)
+    url = Column(String(255), unique=True)
     typeid = Column(Integer, ForeignKey('type.id'))
 
     def __init__(self, url, typeid):

@@ -1,11 +1,11 @@
 html, body {
     height: 100%;
-    background-color: red;
-    position: relative
+    background-color: #a6e1ec;
+    opacity: 2;
+    position: relative;
 }
 
 .search-container {
-    background-color: red;
     width: 100%;
     overflow: hidden
 }
@@ -70,6 +70,7 @@ html, body {
     top: 0;
     left: -15px
 }
+
 
 .search-container .search .plugins-container {
     border-right: 1px solid #718fb3;
@@ -288,49 +289,6 @@ html, body {
 }
 
 
-.ads-container .container {
-    height: 180px;
-}
-
-.ads-container .container .row {
-    margin-left: 0;
-    margin-right: 0
-}
-
-.ads-container .container .col-sm-12 div {
-    margin: 0 auto
-}
-
-@media (max-width: 767px) {
-    .ads-container {
-        height: 100px
-    }
-
-    .ads-container .container {
-        padding: 0;
-        height: 100px
-    }
-
-    .ads-container .container .col-sm-12 {
-        padding-left: 0;
-        padding-right: 0
-    }
-}
-
-.mobile-ad {
-    display: none
-}
-
-@media (max-width: 767px) {
-    .mobile-ad {
-        display: block
-    }
-
-    .fullscreen-ad {
-        display: none
-    }
-}
-
 p.error {
     clear: both;
     color: #c00;
@@ -347,3 +305,4 @@ p.error a {
     font-weight: 400;
     color: #c00 !important
 }
+
